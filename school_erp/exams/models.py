@@ -69,11 +69,32 @@ class ExamSchedule(models.Model):
     start_time = models.TimeField()
     duration_minutes = models.PositiveIntegerField()
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
-
+    total_marks = models.DecimalField(max_digits=5, decimal_places=2)
+    passing_marks = models.DecimalField(max_digits=5, decimal_places=2)
+    is_result_published = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('class_assigned', 'subject', 'date', 'start_time')
 
+    def clean(self):
+        from .validators import validate_exam_schedule, validate_teacher_availability
+        validate_exam_schedule({
+            'class_assigned': self.class_assigned_id,
+            'date': self.date,
+            'start_time': self.start_time,
+            'duration_minutes': self.duration_minutes,
+            'venue': self.venue_id
+        })
+        validate_teacher_availability(
+            self.teacher_id,
+            self.date,
+            self.start_time,
+            self.duration_minutes
+        )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.subject.name} - {self.class_assigned.name} on {self.date}"
