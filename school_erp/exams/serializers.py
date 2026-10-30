@@ -36,10 +36,14 @@ class VenueSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ExamScheduleSerialzer(serializers.ModelSerializer):
+class ExamScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExamSchedule
         fields = '__all__'
+
+
+# Previous name kept so existing imports do not break.
+ExamScheduleSerialzer = ExamScheduleSerializer
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:

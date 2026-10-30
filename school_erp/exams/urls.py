@@ -1,6 +1,6 @@
 from django.urls import path,include
 from rest_framework.routers import DefaultRouter
-from .views import BoardViewSet,ClassViewSet,SubjectViewSet,ExamTypeViewSet,ExamPatternViewSet,VenueViewSet,ExamScheduleViewSet,smart_schedule_view
+from .views import BoardViewSet,ClassViewSet,SubjectViewSet,ExamTypeViewSet,ExamPatternViewSet,VenueViewSet,ExamScheduleViewSet,smart_schedule_view,evaluate_exam
 
 
 router = DefaultRouter()
@@ -18,4 +18,5 @@ router.register(r'exam-schedules', ExamScheduleViewSet)
 urlpatterns = [
     path('',include(router.urls)),
     path('smart-schedule/', smart_schedule_view, name = 'smart_schedule'),
+    path('evaluate/', evaluate_exam, name='evaluate_exam'),
 ]
